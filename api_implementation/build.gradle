@@ -37,7 +37,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
 
-    implementation "com.google.android.material:material:1.1.0"
+    implementation "com.google.android.material:material:1.2.1"
     implementation "androidx.exifinterface:exifinterface:${versions.androidXExif}"
 
     implementation "com.google.firebase:firebase-analytics:${versions.firebaseAnalytics}"
@@ -45,7 +45,7 @@ dependencies {
     implementation "com.google.firebase:firebase-auth:${versions.firebaseAuth}"
     api "com.google.firebase:firebase-messaging:${versions.firebaseMessaging}"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testImplementation "org.robolectric:robolectric:${versions.robolectric}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
     testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'

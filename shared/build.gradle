@@ -31,19 +31,19 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
 
     api "androidx.core:core-ktx:1.3.1"
-    api "androidx.appcompat:appcompat:1.3.0-alpha01"
+    api "androidx.appcompat:appcompat:1.3.0-alpha02"
     api "androidx.emoji:emoji:1.1.0"
     api "androidx.annotation:annotation:${versions.androidX}"
-    api "com.google.android.material:material:1.1.0"
-    api "androidx.palette:palette:${versions.androidX}"
-    api "androidx.preference:preference:1.1.1"
+    api "com.google.android.material:material:1.2.1"
+    api "androidx.palette:palette-ktx:${versions.androidX}"
+    api "androidx.preference:preference-ktx:1.1.1"
     api "androidx.leanback:leanback:${versions.androidX}"
     api "androidx.percentlayout:percentlayout:${versions.androidX}"
     api "androidx.browser:browser:1.2.0"
     api "androidx.exifinterface:exifinterface:${versions.androidXExif}"
     api 'androidx.sharetarget:sharetarget:1.0.0'
 
-    api 'com.google.firebase:firebase-crashlytics:17.1.1'
+    api 'com.google.firebase:firebase-crashlytics:17.2.1'
     api "com.google.firebase:firebase-analytics:${versions.firebaseAnalytics}"
     api "com.google.firebase:firebase-auth:${versions.firebaseAuth}"
     api "com.google.android.gms:play-services-maps:${versions.playServices}"
@@ -92,7 +92,7 @@ dependencies {
     api(name: 'material-camera', ext: 'aar')
     api(name: 'recyclerview-multiselect', ext: 'aar')
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testImplementation "org.robolectric:robolectric:${versions.robolectric}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
     testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'
