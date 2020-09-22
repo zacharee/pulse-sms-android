@@ -29,7 +29,7 @@ class NotificationCarHelper(private val service: Context) {
                 carRead, PendingIntent.FLAG_UPDATE_CURRENT)
 
         // Android Auto extender
-        val car = NotificationCompat.CarExtender.UnreadConversation.Builder(if (conversation.privateNotification) service.getString(R.string.new_message) else conversation.title)
+        val car = NotificationCompat.CarExtender.UnreadConversation.Builder((if (conversation.privateNotification) service.getString(R.string.new_message) else conversation.title)!!)
                 .setReadPendingIntent(pendingCarRead)
                 .setReplyAction(pendingCarReply, remoteInput)
                 .setLatestTimestamp(conversation.timestamp)
