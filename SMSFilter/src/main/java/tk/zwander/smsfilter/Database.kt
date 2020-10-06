@@ -1,8 +1,9 @@
 package tk.zwander.smsfilter
 
 import android.content.Context
+import java.io.File
 
-class Database(private val context: Context) {
+class Database(private val context: Context, private val targetFile: File) {
     companion object {
         //TODO: These will need to be refined.
         private const val LOWER_SCORE = 10
@@ -15,6 +16,10 @@ class Database(private val context: Context) {
 
     //TODO: There might be a better collection for this.
     private val knownGoodMessages = HashSet<String>()
+
+    init {
+        initializeDatabase()
+    }
 
     fun checkKeywordScore(word: String): Int {
         return 0
@@ -53,5 +58,9 @@ class Database(private val context: Context) {
     fun removeMessageFromGoodDatabase(msg: String) {
         //TODO: Similar to addMessageToGoodDatabase()
         knownGoodMessages.remove(msg)
+    }
+
+    private fun initializeDatabase() {
+
     }
 }
