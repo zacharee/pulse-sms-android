@@ -4,13 +4,6 @@ import android.content.Context
 import java.io.File
 
 class Database(private val context: Context, private val targetFile: File) {
-    companion object {
-        //TODO: These will need to be refined.
-        private const val LOWER_SCORE = 10
-        private const val HIGHER_SCORE = 12
-        private val SCORE_THRESHOLD = LOWER_SCORE to HIGHER_SCORE
-    }
-
     private val knownSpamKeywords = HashMap<String, Int>()
     private val reportedSpamMessages = HashMap<String, Int>()
 
