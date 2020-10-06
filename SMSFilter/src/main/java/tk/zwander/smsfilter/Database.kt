@@ -15,7 +15,11 @@ class Database(private val context: Context, private val targetFile: File) {
     }
 
     fun checkKeywordScore(word: String): Int {
-        return 0
+        //TODO: We should probably have some sort of
+        //TODO: handling for when a word isn't found. Not really
+        //TODO: sure how it would work, but the current method
+        //TODO: is relying on an exhaustive database.
+        return keywordScores[word] ?: 0
     }
 
     fun updateWordScore(word: String, overrideScore: Int = -1) {
