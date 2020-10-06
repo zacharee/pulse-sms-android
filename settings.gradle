@@ -15,3 +15,4 @@
  */
 
 include ':app', ':shared', ':encryption', ':api', ':api_implementation', ':wear'
+include ':SMSFilter'

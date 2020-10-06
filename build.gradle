@@ -23,7 +23,6 @@ def apiKeys = new Properties()
 apiKeys.load(new FileInputStream(propsFile))
 
 buildscript {
-
     ext.buildInfo = [
             'id'                : 'xyz.klinker.messenger.spamblock',
             'name'              : '5.4.4',
@@ -31,7 +30,7 @@ buildscript {
     ]
 
     ext.versions = [
-            'gradlePlugin'      : '4.2.0-alpha11',
+            'gradlePlugin'      : '4.2.0-alpha12',
             'targetSdk'         : 30,
             'minSdk'            : 21,
 
