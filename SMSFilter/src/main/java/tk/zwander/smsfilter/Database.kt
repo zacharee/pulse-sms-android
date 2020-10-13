@@ -3,9 +3,9 @@ package tk.zwander.smsfilter
 import android.content.Context
 import android.content.res.AssetFileDescriptor
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import tk.zwander.smsfilter.util.ObservableHashMap
 import tk.zwander.smsfilter.util.ObservableHashSet
+import tk.zwander.smsfilter.util.fromJson
 import java.io.File
 
 class Database(private val context: Context, private val scores: AssetFileDescriptor,
