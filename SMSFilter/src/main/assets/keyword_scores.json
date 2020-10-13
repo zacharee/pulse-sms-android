@@ -7,7 +7,11 @@
   "winner": 10,
   "lucky": 6,
   "best-buy": 8,
+  "bestbuy": 8,
   "netwrk": 8,
+  "gift": 4,
   "gifts": 5,
-  "http://": 3
+  "gfts": 7,
+  "http://": 3,
+  "merger": 4
 }
