@@ -24,7 +24,7 @@ class SMSChecker private constructor(private val context: Context) {
         }
     }
 
-    private val database = Database(context, File(""))
+    private val database = Database.newInstance(context)
 
     fun checkMessage(msg: String): MessageStatus {
         val messageScore = calculateSpamScore(msg)

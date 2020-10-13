@@ -1,14 +1,41 @@
 package tk.zwander.smsfilter
 
 import android.content.Context
+import android.content.res.AssetFileDescriptor
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import tk.zwander.smsfilter.util.ObservableHashMap
+import tk.zwander.smsfilter.util.ObservableHashSet
 import java.io.File
 
-class Database(private val context: Context, private val targetFile: File) {
+class Database(private val context: Context, private val scores: AssetFileDescriptor,
+               private val reportedFile: File, private val goodFile: File) {
+    companion object {
+        private const val KEYWORD_SCORES_FILE = "keyword_scores.json"
+        private const val REPORTED_SPAM_FILE = "reported_spam_msgs.json"
+        private const val KNOWN_GOOD_FILE = "known_good_msgs.json"
+
+        fun newInstance(context: Context): Database {
+            val scores = context.assets.openFd(KEYWORD_SCORES_FILE)
+            val reported = File(context.dataDir, REPORTED_SPAM_FILE)
+            val good = File(context.dataDir, KNOWN_GOOD_FILE)
+
+            return Database(context, scores, reported, good)
+        }
+    }
+
     private val keywordScores = HashMap<String, Int>()
-    private val reportedSpamMessages = HashMap<String, Int>()
+    private val reportedSpamMessages = ObservableHashMap<String, Int> {
+        saveDatabase(reportedFile, this)
+    }
 
     //TODO: There might be a better collection for this.
-    private val knownGoodMessages = HashSet<String>()
+    private val knownGoodMessages = ObservableHashSet<String> {
+        saveDatabase(goodFile, this)
+    }
+
+    private val gson = GsonBuilder()
+            .create()
 
     init {
         initializeDatabase()
@@ -54,6 +81,22 @@ class Database(private val context: Context, private val targetFile: File) {
     }
 
     private fun initializeDatabase() {
+        scores.createInputStream().bufferedReader().use { scoresReader ->
+            keywordScores.putAll(gson.fromJson(scoresReader))
+        }
 
+        reportedFile.bufferedReader().use { reportedReader ->
+            reportedSpamMessages.putAll(gson.fromJson(reportedReader))
+        }
+
+        goodFile.bufferedReader().use { goodReader ->
+            knownGoodMessages.addAll(gson.fromJson(goodReader))
+        }
+    }
+
+    private fun <T> saveDatabase(databaseFile: File, contents: T) {
+        databaseFile.bufferedWriter().use { reportedWriter ->
+            gson.toJson(contents, reportedWriter)
+        }
     }
 }
