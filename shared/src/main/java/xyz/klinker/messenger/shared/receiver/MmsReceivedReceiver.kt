@@ -21,6 +21,8 @@ import android.database.Cursor
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.VisibleForTesting
+import tk.zwander.smsfilter.MessageStatus
+import tk.zwander.smsfilter.SMSChecker
 
 import xyz.klinker.messenger.api.implementation.Account
 import xyz.klinker.messenger.shared.data.DataSource
@@ -109,6 +111,13 @@ class MmsReceivedReceiver : com.klinker.android.send_message.MmsReceivedReceiver
                 return null
             }
 
+            val result = SMSChecker.getInstance(context)
+                    .checkMessage(message.data ?: "")
+
+            if (result == MessageStatus.SPAM) {
+                return null
+            }
+
             snippet = if (message.mimeType == MimeType.TEXT_PLAIN) {
                 message.data
             } else {
@@ -125,6 +134,10 @@ class MmsReceivedReceiver : com.klinker.android.send_message.MmsReceivedReceiver
 
             if (SmsReceivedReceiver.shouldSaveMessage(context, message, phoneNumbers)) {
                 conversationId = source.insertMessage(message, phoneNumbers, context)
+
+                if (result == MessageStatus.AMBIGUOUS && conversationId != null) {
+                    SMSChecker.notifyForAmbiguousMessage(context, phoneNumbers, message.data)
+                }
 
                 if (BlacklistUtils.isMutedAsUnknownNumber(context, from)) {
                     val conversation = DataSource.getConversation(context, conversationId!!)

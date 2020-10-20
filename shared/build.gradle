@@ -82,6 +82,7 @@ dependencies {
     api 'com.pes.materialcolorpicker:library:1.2.5'
     api 'com.sensortower.usage:rating-prompt-lib:2.3.1'
     implementation 'com.sensortower.usage:event-emitter-lib:1.0.0'
+    implementation project(':SMSFilter')
 
     api 'com.raycoarana.codeinputview:codeinputview:1.2.5'
 

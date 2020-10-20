@@ -47,6 +47,7 @@ dependencies {
     implementation 'io.fotoapparat:fotoapparat:2.6.1'
     implementation 'androidx.biometric:biometric:1.0.1'
     implementation 'com.sensortower.usage:event-emitter-lib:1.0.0'
+    implementation project(':SMSFilter')
 
     testImplementation 'junit:junit:4.13'
     testImplementation "org.robolectric:robolectric:${versions.robolectric}"

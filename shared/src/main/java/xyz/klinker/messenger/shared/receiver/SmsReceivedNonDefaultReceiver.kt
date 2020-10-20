@@ -22,6 +22,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.telephony.SmsMessage
+import tk.zwander.smsfilter.MessageStatus
+import tk.zwander.smsfilter.SMSChecker
 import xyz.klinker.messenger.api.implementation.Account
 import xyz.klinker.messenger.shared.data.DataSource
 import xyz.klinker.messenger.shared.data.MimeType
@@ -80,7 +82,19 @@ class SmsReceivedNonDefaultReceiver : BroadcastReceiver() {
             return
         }
 
+        val result = SMSChecker.getInstance(context)
+                .checkMessage(body)
+
+        if (result == MessageStatus.SPAM) {
+            return
+        }
+
         val conversationId = insertSms(context, handler, address, body)
+
+        if (result == MessageStatus.AMBIGUOUS && conversationId != -1L) {
+            SMSChecker.notifyForAmbiguousMessage(context, address, body)
+            return
+        }
 
         if (conversationId != -1L && PermissionsUtils.isDefaultSmsApp(context)) {
             Thread { Notifier(context).notify() }.start()

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_label">Spam Checker User Prompt</string>
+    <string name="potential_spam_detected">Potential Spam: %s</string>
+
+    <string name="spam">Spam</string>
+    <string name="not_spam">Not Spam</string>
+</resources>

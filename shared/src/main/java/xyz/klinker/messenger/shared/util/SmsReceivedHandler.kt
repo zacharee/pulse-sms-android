@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Telephony
 import android.telephony.SmsMessage
+import tk.zwander.smsfilter.MessageStatus
+import tk.zwander.smsfilter.SMSChecker
 import xyz.klinker.messenger.api.implementation.firebase.AnalyticsHelper
 import xyz.klinker.messenger.shared.data.DataSource
 import xyz.klinker.messenger.shared.data.MimeType
@@ -67,9 +69,21 @@ class SmsReceivedHandler(private val context: Context) {
             return true
         }
 
+        val result = SMSChecker.getInstance(context)
+                .checkMessage(body)
+
+        if (result == MessageStatus.SPAM) {
+            return true
+        }
+
         val conversationId = insertSms(context, address, body, subscriptionId)
         if (conversationId != -2L) {
             insertInternalSms(context, address, body, date)
+        }
+
+        if (result == MessageStatus.AMBIGUOUS && conversationId != -1L && conversationId != -2L) {
+            SMSChecker.notifyForAmbiguousMessage(context, address, body)
+            return false
         }
 
         if (conversationId != -1L && conversationId != -2L) {
