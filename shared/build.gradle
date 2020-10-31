@@ -27,23 +27,22 @@ android {
 }
 
 dependencies {
-
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
 
-    api "androidx.core:core-ktx:1.3.1"
+    api "androidx.core:core-ktx:1.3.2"
     api "androidx.appcompat:appcompat:1.3.0-alpha02"
     api "androidx.emoji:emoji:1.1.0"
     api "androidx.annotation:annotation:${versions.androidX}"
     api "com.google.android.material:material:1.2.1"
-    api "androidx.palette:palette-ktx:${versions.androidX}"
+    api "androidx.palette:palette-ktx:1.0.0"
     api "androidx.preference:preference-ktx:1.1.1"
-    api "androidx.leanback:leanback:${versions.androidX}"
-    api "androidx.percentlayout:percentlayout:${versions.androidX}"
+    api "androidx.leanback:leanback:1.0.0"
+    api "androidx.percentlayout:percentlayout:1.0.0"
     api "androidx.browser:browser:1.2.0"
     api "androidx.exifinterface:exifinterface:${versions.androidXExif}"
     api 'androidx.sharetarget:sharetarget:1.0.0'
 
-    api 'com.google.firebase:firebase-crashlytics:17.2.1'
+    api 'com.google.firebase:firebase-crashlytics:17.2.2'
     api "com.google.firebase:firebase-analytics:${versions.firebaseAnalytics}"
     api "com.google.firebase:firebase-auth:${versions.firebaseAuth}"
     api "com.google.android.gms:play-services-maps:${versions.playServices}"
@@ -67,7 +66,7 @@ dependencies {
 
     api 'com.github.apl-devs:appintro:v4.2.0'
     api 'com.github.yalantis:ucrop:2.2.2'
-    api 'de.hdodenhof:circleimageview:3.0.1'
+    api 'de.hdodenhof:circleimageview:3.1.0'
     api 'com.afollestad:sectioned-recyclerview:0.2.3'
     api 'com.afollestad:easyvideoplayer:0.3.0'
     api 'com.afollestad:drag-select-recyclerview:1.0.0'
@@ -93,7 +92,7 @@ dependencies {
     api(name: 'material-camera', ext: 'aar')
     api(name: 'recyclerview-multiselect', ext: 'aar')
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
     testImplementation "org.robolectric:robolectric:${versions.robolectric}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
     testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'
