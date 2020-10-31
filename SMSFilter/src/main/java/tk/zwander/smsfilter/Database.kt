@@ -1,14 +1,15 @@
 package tk.zwander.smsfilter
 
 import android.content.Context
-import android.content.res.AssetFileDescriptor
 import com.google.gson.GsonBuilder
 import tk.zwander.smsfilter.util.ObservableHashMap
 import tk.zwander.smsfilter.util.ObservableHashSet
 import tk.zwander.smsfilter.util.fromJson
 import java.io.File
+import java.io.InputStream
+import java.util.concurrent.ConcurrentHashMap
 
-class Database(private val context: Context, private val scores: AssetFileDescriptor,
+class Database(private val context: Context, private val scores: InputStream,
                private val reportedFile: File, private val goodFile: File) {
     companion object {
         private const val KEYWORD_SCORES_FILE = "keyword_scores.json"
@@ -16,7 +17,7 @@ class Database(private val context: Context, private val scores: AssetFileDescri
         private const val KNOWN_GOOD_FILE = "known_good_msgs.json"
 
         fun newInstance(context: Context): Database {
-            val scores = context.assets.openFd(KEYWORD_SCORES_FILE)
+            val scores = context.assets.open(KEYWORD_SCORES_FILE)
             val reported = File(context.dataDir, REPORTED_SPAM_FILE)
             val good = File(context.dataDir, KNOWN_GOOD_FILE)
 
@@ -24,7 +25,7 @@ class Database(private val context: Context, private val scores: AssetFileDescri
         }
     }
 
-    private val keywordScores = HashMap<String, Int>()
+    private val keywordScores = ConcurrentHashMap<String, Int>()
     private val reportedSpamMessages = ObservableHashMap<String, Int> {
         saveDatabase(reportedFile, this)
     }
@@ -46,7 +47,7 @@ class Database(private val context: Context, private val scores: AssetFileDescri
         //TODO: handling for when a word isn't found. Not really
         //TODO: sure how it would work, but the current method
         //TODO: is relying on an exhaustive database.
-        return keywordScores[word] ?: 0
+        return if (keywordScores.containsKey(word.toLowerCase())) keywordScores[word.toLowerCase()]!! else 0
     }
 
     fun updateWordScore(word: String, overrideScore: Int = -1) {
@@ -81,16 +82,20 @@ class Database(private val context: Context, private val scores: AssetFileDescri
     }
 
     private fun initializeDatabase() {
-        scores.createInputStream().bufferedReader().use { scoresReader ->
+        scores.bufferedReader().use { scoresReader ->
             keywordScores.putAll(gson.fromJson(scoresReader))
         }
 
-        reportedFile.bufferedReader().use { reportedReader ->
-            reportedSpamMessages.putAll(gson.fromJson(reportedReader))
+        if (reportedFile.exists()) {
+            reportedFile.bufferedReader().use { reportedReader ->
+                reportedSpamMessages.putAll(gson.fromJson(reportedReader))
+            }
         }
 
-        goodFile.bufferedReader().use { goodReader ->
-            knownGoodMessages.addAll(gson.fromJson(goodReader))
+        if (goodFile.exists()) {
+            goodFile.bufferedReader().use { goodReader ->
+                knownGoodMessages.addAll(gson.fromJson(goodReader))
+            }
         }
     }
 

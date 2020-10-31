@@ -17,7 +17,7 @@ class SMSSpamChoiceReceiver : BroadcastReceiver() {
 
         fun makeSpamChoiceUpdateIntent(context: Context, message: String?, which: String): Intent {
             if (which != VALUE_SPAM_CHOICE_GOOD
-                    || which != VALUE_SPAM_CHOICE_SPAM) {
+                    && which != VALUE_SPAM_CHOICE_SPAM) {
                 throw IllegalArgumentException("Variable 'which' must either be 'SPAM' or 'GOOD'.")
             }
 

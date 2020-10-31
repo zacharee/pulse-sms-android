@@ -1,7 +1,6 @@
 package tk.zwander.smsfilter
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
@@ -9,7 +8,6 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import tk.zwander.smsfilter.receiver.SMSSpamChoiceReceiver
-import java.io.File
 
 /**
  * TODO: docs
@@ -80,7 +78,7 @@ class SMSChecker private constructor(private val context: Context) {
                     )
                     .build()
 
-            nmc.notify(100, notification)
+            nmc.notify(1001, notification)
         }
     }
 
@@ -90,7 +88,7 @@ class SMSChecker private constructor(private val context: Context) {
         val messageScore = calculateSpamScore(msg)
 
         return when {
-            messageScore >= LOWER_SCORE || messageScore <= HIGHER_SCORE -> {
+            messageScore in LOWER_SCORE..HIGHER_SCORE -> {
                 MessageStatus.AMBIGUOUS
             }
             messageScore < LOWER_SCORE -> {
