@@ -19,7 +19,9 @@ class SMSChecker private constructor(private val context: Context) {
         //TODO: These will need to be refined.
         private const val LOWER_SCORE = 10
         private const val HIGHER_SCORE = 12
-        private val SCORE_THRESHOLD = LOWER_SCORE to HIGHER_SCORE
+
+        private const val MESSAGE_MATCHES_KNOWN_PERCENT_LOW = 0.8
+        private const val MESSAGE_MATCHES_KNOWN_PERCENT_HIGH = 0.9
 
         private var instance: SMSChecker? = null
 
@@ -59,7 +61,7 @@ class SMSChecker private constructor(private val context: Context) {
                                             message,
                                             SMSSpamChoiceReceiver.VALUE_SPAM_CHOICE_SPAM
                                     ),
-                                    0
+                                    PendingIntent.FLAG_UPDATE_CURRENT
                             )
                     )
                     .addAction(
@@ -73,7 +75,7 @@ class SMSChecker private constructor(private val context: Context) {
                                             message,
                                             SMSSpamChoiceReceiver.VALUE_SPAM_CHOICE_GOOD
                                     ),
-                                    0
+                                    PendingIntent.FLAG_UPDATE_CURRENT
                             )
                     )
                     .build()
@@ -88,11 +90,21 @@ class SMSChecker private constructor(private val context: Context) {
         val messageScore = calculateSpamScore(msg)
 
         return when {
-            messageScore in LOWER_SCORE..HIGHER_SCORE -> {
-                MessageStatus.AMBIGUOUS
-            }
-            messageScore < LOWER_SCORE -> {
-                MessageStatus.GOOD
+            messageScore < HIGHER_SCORE -> {
+                val matchingScore = calculateMessageMatchPercent(msg)
+
+                when {
+                    matchingScore > MESSAGE_MATCHES_KNOWN_PERCENT_HIGH -> {
+                        MessageStatus.SPAM
+                    }
+                    messageScore in LOWER_SCORE..HIGHER_SCORE || matchingScore in
+                            MESSAGE_MATCHES_KNOWN_PERCENT_LOW..MESSAGE_MATCHES_KNOWN_PERCENT_HIGH -> {
+                        MessageStatus.AMBIGUOUS
+                    }
+                    else -> {
+                        MessageStatus.GOOD
+                    }
+                }
             }
             else -> {
                 MessageStatus.SPAM
@@ -106,6 +118,10 @@ class SMSChecker private constructor(private val context: Context) {
 
     fun onUserMarkedMessageGood(msg: String) {
         database.addMessageToGoodDatabase(msg)
+    }
+
+    private fun calculateMessageMatchPercent(msg: String): Double {
+        return database.calculateMessageMatchPercent(msg)
     }
 
     private fun calculateSpamScore(msg: String): Int {

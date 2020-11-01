@@ -62,19 +62,10 @@ class Database(private val context: Context, private val scores: InputStream,
         return 0
     }
 
-    fun updateWordScore(word: String, overrideScore: Int = -1) {
-        val score = if (overrideScore > -1)
-            overrideScore else checkKeywordScore(word)
-
-        keywordScores[word] = score
-    }
-
     fun addMessageToSpamDatabase(msg: String) {
         reportedSpamMessages[msg] = msg.split(" ")
                 .map {
-                    checkKeywordScore(it).also { score ->
-                        updateWordScore(it, score)
-                    }
+                    checkKeywordScore(it)
                 }.sum()
     }
 
@@ -91,6 +82,25 @@ class Database(private val context: Context, private val scores: InputStream,
     fun removeMessageFromGoodDatabase(msg: String) {
         //TODO: Similar to addMessageToGoodDatabase()
         knownGoodMessages.remove(msg)
+    }
+
+    fun calculateMessageMatchPercent(msg: String): Double {
+        val split = msg.split(" ")
+
+        return if (reportedSpamMessages.size > 0) {
+            reportedSpamMessages.keys.maxOf {
+                val splitKey = it.split(" ")
+                val matchingWords = HashSet<String>()
+                val totalWords = HashSet<String>(splitKey).size
+
+                splitKey.forEach { k ->
+                    matchingWords += split.filter { s -> s.contains(k, true)
+                            || k.contains(s, true) }
+                }
+
+                matchingWords.size.toDouble() / totalWords
+            }
+        } else 0.0
     }
 
     private fun initializeDatabase() {
