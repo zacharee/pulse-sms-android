@@ -47,7 +47,19 @@ class Database(private val context: Context, private val scores: InputStream,
         //TODO: handling for when a word isn't found. Not really
         //TODO: sure how it would work, but the current method
         //TODO: is relying on an exhaustive database.
-        return if (keywordScores.containsKey(word.toLowerCase())) keywordScores[word.toLowerCase()]!! else 0
+
+        //Currently, word splitting is done with " ".
+        //That can cause "words" to include punctuation
+        //(e.g "winner!!"). Looping through all score values
+        //does cause complexity to go up, but it enables
+        //fuzzy word checking.
+        keywordScores.forEach { (w, s) ->
+            if (word.contains(w, true)) {
+                return s
+            }
+        }
+
+        return 0
     }
 
     fun updateWordScore(word: String, overrideScore: Int = -1) {
