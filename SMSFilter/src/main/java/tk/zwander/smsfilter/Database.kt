@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import tk.zwander.smsfilter.util.ObservableHashMap
 import tk.zwander.smsfilter.util.ObservableHashSet
 import tk.zwander.smsfilter.util.fromJson
+import tk.zwander.smsfilter.util.toAlphaNumeric
 import java.io.File
 import java.io.InputStream
 import java.util.concurrent.ConcurrentHashMap
@@ -54,7 +55,7 @@ class Database(private val context: Context, private val scores: InputStream,
         //does cause complexity to go up, but it enables
         //fuzzy word checking.
         keywordScores.forEach { (w, s) ->
-            if (word.contains(w, true)) {
+            if (word.toAlphaNumeric().equals(w.toAlphaNumeric(), true)) {
                 return s
             }
         }
@@ -84,6 +85,14 @@ class Database(private val context: Context, private val scores: InputStream,
         knownGoodMessages.remove(msg)
     }
 
+    fun getSpamMessages(): HashMap<String, Int> {
+        return HashMap(reportedSpamMessages)
+    }
+
+    fun getGoodMessages(): HashSet<String> {
+        return HashSet(knownGoodMessages)
+    }
+
     fun calculateMessageMatchPercent(msg: String): Double {
         val split = msg.split(" ")
 
@@ -94,11 +103,12 @@ class Database(private val context: Context, private val scores: InputStream,
                 val totalWords = HashSet<String>(splitKey).size
 
                 splitKey.forEach { k ->
-                    matchingWords += split.filter { s -> s.contains(k, true)
-                            || k.contains(s, true) }
+                    matchingWords += split.filter { s ->
+                        s.toAlphaNumeric().equals(k.toAlphaNumeric(), true)
+                    }
                 }
 
-                matchingWords.size.toDouble() / totalWords
+                (matchingWords.size.toDouble() / totalWords)
             }
         } else 0.0
     }

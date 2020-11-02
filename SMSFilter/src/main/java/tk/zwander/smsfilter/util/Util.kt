@@ -8,3 +8,7 @@ import java.io.Reader
 fun <T> Gson.fromJson(reader: Reader): T {
     return fromJson(reader, object : TypeToken<T>() {}.type)
 }
+
+fun String.toAlphaNumeric(): String {
+    return replace(Regex("[^A-Za-z0-9 ]"), "")
+}
