@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-def propsFile = project.file('keystore.properties')
-def props = new Properties()
-props.load(new FileInputStream(propsFile))
+//def propsFile = project.file('keystore.properties')
+//def props = new Properties()
+//props.load(new FileInputStream(propsFile))
 
-propsFile = rootProject.file('api_keys.properties')
-def apiKeys = new Properties()
-apiKeys.load(new FileInputStream(propsFile))
+//propsFile = rootProject.file('api_keys.properties')
+//def apiKeys = new Properties()
+//apiKeys.load(new FileInputStream(propsFile))
 
 buildscript {
     ext.buildInfo = [
@@ -86,8 +86,8 @@ allprojects {
     }
 
     configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            def requested = details.requested
+//        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//            def requested = details.requested
 //            if (requested.group == 'com.google.android.gms' && requested.name == 'play-services-basement') {
 //                details.useVersion '16.1.0'
 //            } else if (requested.group == 'com.google.android.gms' && requested.name == 'play-services-tasks') {
@@ -95,7 +95,7 @@ allprojects {
 //            } else if (requested.group == 'com.google.android.gms' && requested.name == 'play-services-base') {
 //                details.useVersion '16.0.1'
 //            }
-        }
+//        }
     }
 
 }
@@ -111,9 +111,9 @@ subprojects {
                 defaultConfig {
                     targetSdkVersion versions.targetSdk
 
-                    buildConfigField("String", "GIPHY_API_KEY", "\"${apiKeys['GIPHY']}\"")
-                    buildConfigField("String", "ARTICLE_API_KEY", "\"${apiKeys['ARTICLE']}\"")
-                    buildConfigField("String", "YOUTUBE_API_KEY", "\"${apiKeys['YOUTUBE']}\"")
+//                    buildConfigField("String", "GIPHY_API_KEY", "\"${apiKeys['GIPHY']}\"")
+//                    buildConfigField("String", "ARTICLE_API_KEY", "\"${apiKeys['ARTICLE']}\"")
+//                    buildConfigField("String", "YOUTUBE_API_KEY", "\"${apiKeys['YOUTUBE']}\"")
 
                     vectorDrawables.useSupportLibrary = true
                     multiDexEnabled true
@@ -129,10 +129,10 @@ subprojects {
                         keyPassword "android"
                     }
                     release {
-                        storeFile file(props['keystorefile'])
-                        storePassword props['keystorepassword']
-                        keyAlias props['keyalias']
-                        keyPassword props['keypassword']
+//                        storeFile file(props['keystorefile'])
+//                        storePassword props['keystorepassword']
+//                        keyAlias props['keyalias']
+//                        keyPassword props['keypassword']
                     }
                 }
 

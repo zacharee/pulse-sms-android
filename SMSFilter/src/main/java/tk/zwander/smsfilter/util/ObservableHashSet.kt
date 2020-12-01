@@ -2,6 +2,12 @@ package tk.zwander.smsfilter.util
 
 import java.util.function.Predicate
 
+/**
+ * A HashSet implementation with a modification callback.
+ *
+ * @param T the data type.
+ * @property modificationCallback invoked when the set is modified.
+ */
 class ObservableHashSet<T>(private val modificationCallback: ObservableHashSet<T>.() -> Unit) : HashSet<T>() {
     override fun add(element: T): Boolean {
         return super.add(element).also {

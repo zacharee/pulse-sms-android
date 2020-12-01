@@ -2,6 +2,13 @@ package tk.zwander.smsfilter.util
 
 import java.util.function.BiFunction
 
+/**
+ * A HashMap implementation with a modification callback.
+ *
+ * @param K the key type.
+ * @param V the value type.
+ * @property modificationCallback invoked when the map is modified.
+ */
 class ObservableHashMap<K, V>(private val modificationCallback: ObservableHashMap<K, V>.() -> Unit) : HashMap<K, V>() {
     override fun put(key: K, value: V): V? {
         return super.put(key, value).also {
