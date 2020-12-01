@@ -126,6 +126,8 @@ class SMSChecker private constructor(private val context: Context) {
 
     /**
      * Check a given message to see if it's spam.
+     * Host apps should call this when a message is received and evaluate
+     * the returned status.
      *
      * @param msg the message to check.
      * @return the status of the message.
